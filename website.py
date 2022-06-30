@@ -59,7 +59,7 @@ content_type = {
 }
 
 
-class webServer:
+class WebServer:
     def __init__(self, ip, port, directory):
         self.directory = directory
         self.ip = ip
