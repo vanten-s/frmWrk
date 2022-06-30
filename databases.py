@@ -13,6 +13,8 @@ Usage:
 
 """
 
+def help():
+    return "Usage: CREATE <name> # Creates a new database\nADDATTRIBUTE <name> <attribute> # Adds an attribute to a database\nADD <name> <database> # Adds an entry to a database\nLIST # Lists all databases\nGET <entry> <database> # Gets an entry from a database\nSET <entry> <database> <attribute> <value> # Sets an attribute of an entry in a database"
 
 
 class Database:
@@ -48,7 +50,7 @@ class Entry:
     def __init__(self, name, parent):
         self.name = name
         self.parent = parent
-        self.attributes = {}
+        self.attributes = {attr:None for attr in parent.attributes}
         self.parent.entrys[name] = self
 
     def __hash__(self):
@@ -60,8 +62,11 @@ class Entry:
     def __str__(self):
         return self.attributes.__str__()
 
+    def __repr__(self):
+        return self.name + " with " + self.attributes.__str__()
+
     def __setAttribute(self, attribute):
-        self.attributes[attribute] = None
+        self.attributes[attribute] = ""
 
     def setAttribute(self, attribute, value):
         if attribute in self.attributes.keys():
@@ -101,10 +106,10 @@ def executeInstruction(instruction):
         return databases
 
     elif tokens[0] == "GET":
-        return databases[tokens[1]].entrys[int(tokens[2])].attributes
+        return databases[tokens[1]].entrys[tokens[2]].getAttribute(tokens[3])
 
     elif tokens[0] == "SET":
-        databases[tokens[1]].entrys[int(tokens[2])].setAttribute(tokens[3], tokens[4])
+        databases[tokens[1]].entrys[tokens[2]].setAttribute(tokens[3], tokens[4])
 
     else:
         return "Invalid instruction"
