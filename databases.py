@@ -1,4 +1,7 @@
 
+
+import decorators
+
 databases = {}
 
 """
@@ -83,6 +86,7 @@ class Entry:
 
 def executeInstruction(instruction):
     tokens = instruction.split(" ")
+    decorators.log_string(f"Executing instruction: {instruction}")
     if tokens[0] == "CREATE":
         database = Database(tokens[1])
         return database

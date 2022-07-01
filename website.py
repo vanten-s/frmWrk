@@ -6,7 +6,7 @@ sys.dont_write_bytecode = True
 import socket
 import threading
 from decorators import *
-
+import databases
 
 
 content_type = {
@@ -57,7 +57,6 @@ content_type = {
                 'opus': 'audio/ogg',
                 'flac': 'audio/flac'
 }
-
 
 class WebServer:
     def __init__(self, ip, port, directory):

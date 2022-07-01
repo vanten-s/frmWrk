@@ -1,12 +1,11 @@
 # Byte-compiled / optimized / DLL files
+clearLogs.py
 __pycache__/
 *.py[cod]
 *$py.class
 test.py
 website/
 .vscode/
-run.sh
-log.txt
 
 # C extensions
 *.so
