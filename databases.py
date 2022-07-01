@@ -1,8 +1,11 @@
 
 
 import decorators
+import socket
+import threading
 
 databases = {}
+__using_remote_access = False
 
 """
 Usage:
@@ -10,7 +13,7 @@ Usage:
     ADDATTRIBUTE <name> <attribute> # Adds an attribute to a database
     ADD <name> <database> # Adds an entry to a database
     LIST # Lists all databases
-    GET <entry> <database> # Gets an entry from a database
+    GET <entry> <database> <attribute> # Gets an entry from a database
     SET <entry> <database> <attribute> <value> # Sets an attribute of an entry in a database
 
 
@@ -110,12 +113,44 @@ def executeInstruction(instruction):
         return databases
 
     elif tokens[0] == "GET":
-        return databases[tokens[1]].entrys[tokens[2]].getAttribute(tokens[3])
+        return databases[tokens[1]].entrys[tokens[2]].getAttribute(tokens[3]).__str__()
 
     elif tokens[0] == "SET":
         databases[tokens[1]].entrys[tokens[2]].setAttribute(tokens[3], tokens[4])
 
     else:
         return "Invalid instruction"
+
+def __enable_remote_access(ip, port):
+    HOST = ip  # The server's hostname or IP address
+    PORT = port        # The port used by the server
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+    s.listen(1)
+    while True and __using_remote_access:
+        conn, addr = s.accept()
+        with conn:
+            print('Connected by', addr)
+            while True:
+                data = conn.recv(1024)
+                conn.send(executeInstruction(data.decode()).encode())
+                if not data:
+                    break
+                
+
+    print('Connection closed')    
+
+@decorators.log
+def enable_remote_access(ip, port):
+    global __using_remote_access
+    __using_remote_access = True
+    t = threading.Thread(target=__enable_remote_access, args=(ip, port))
+    t.start()
+    return "Enabled remote access"
+
+def disable_remote_access():
+    global __using_remote_access
+    __using_remote_access = False
+    return "Disabled remote access"
     
-    
+
