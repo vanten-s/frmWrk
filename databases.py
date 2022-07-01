@@ -116,10 +116,13 @@ def executeInstruction(instruction):
         return databases[tokens[1]].entrys[tokens[2]].getAttribute(tokens[3]).__str__()
 
     elif tokens[0] == "SET":
-        databases[tokens[1]].entrys[tokens[2]].setAttribute(tokens[3], tokens[4])
+        database = databases[tokens[1]].entrys[tokens[2]].setAttribute(tokens[3], tokens[4])
 
     else:
+        print(instruction)
         return "Invalid instruction"
+
+    return "Success"
 
 def __enable_remote_access(ip, port):
     HOST = ip  # The server's hostname or IP address
@@ -132,13 +135,16 @@ def __enable_remote_access(ip, port):
         with conn:
             print('Connected by', addr)
             while True:
-                data = conn.recv(1024)
-                conn.send(executeInstruction(data.decode()).encode())
-                if not data:
-                    break
+                data = conn.recv(1024).decode()
+
+                firstLine = data.split("\n")[0]
+                instruction = " ".join(firstLine.split(" ")[1:-1])
+
+                conn.send(executeInstruction(instruction).encode())
+                if not data: break
                 
 
-    print('Connection closed')    
+    print('Connection closed')
 
 @decorators.log
 def enable_remote_access(ip, port):
