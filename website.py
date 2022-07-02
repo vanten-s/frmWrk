@@ -9,6 +9,30 @@ from decorators import *
 import databases
 
 
+AASCI_404_NOT_FOUND = """
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+</head>
+<body>
+
+    <h1>404 Not Found</h1>
+ <pre style="font-size: xx-large;">   _  _    ___  _  _                 _      __                      _   
+  | || |  / _ \| || |               | |    / _|                    | |  
+  | || |_| | | | || |_   _ __   ___ | |_  | |_ ___  _   _ _ __   __| |  
+  |__   _| | | |__   _| | '_ \ / _ \| __| |  _/ _ \| | | | '_ \ / _` |  
+     | | | |_| |  | |   | | | | (_) | |_  | || (_) | |_| | | | | (_| |  
+     |_|  \___/   |_|   |_| |_|\___/ \__| |_| \___/ \__,_|_| |_|\__,_|</pre> 
+                                                                         
+</body>
+
+"""
+
 content_type = {
                 'html': 'text/html; charset=\'utf-8\'', 
                 'css': 'text/css; charset=\'utf-8\'', 
@@ -59,7 +83,7 @@ content_type = {
 }
 
 class WebServer:
-    def __init__(self, ip, port, directory):
+    def __init__(self, ip, port, directory, site404="/404.html"):
         self.directory = directory
         self.ip = ip
         self.port = port
@@ -74,6 +98,14 @@ class WebServer:
         return content_type[path]
 
     def __getResponse(self, code, content_type, content):
+
+        response = b'HTTP/1.1 ' + code.encode("utf-8") + b'\n'
+        response += b'Content-Type: ' + content_type.encode("utf-8") + b'\n'
+        response += b'Content-Length: ' + str(len(content)).encode("utf-8") + b'\n\n'
+        response += content + b'\n\n'
+
+        return response
+
         return b'HTTP/1.1 ' + code.encode("utf-8") + b'\nContent-Type: ' + content_type.encode("utf-8") + b'\nContent-Length: ' + str(len(content)).encode("utf-8") + b'\n\n' + content + b'\n\n'
 
     def __get(self, path):
@@ -95,7 +127,7 @@ class WebServer:
                     return self.__getResponse("404 Not Found", content_type, content)
                     
             except FileNotFoundError:
-                return self.__getResponse("404 Not Found", "text/html", "404 Not Found")
+                return self.__getResponse("404 Not Found", "text/html; charset=\"utf-8\"", AASCI_404_NOT_FOUND.encode("utf-8"))
 
     
     def __handleRequest(self, request):

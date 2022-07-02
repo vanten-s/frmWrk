@@ -1,0 +1,54 @@
+start was called at 07/02/2022, 15:40:52
+('127.0.0.1', 57368) asked for /
+start was called at 07/02/2022, 15:44:23
+('127.0.0.1', 41258) asked for /
+('127.0.0.1', 41258) asked for /
+start was called at 07/02/2022, 15:48:20
+('127.0.0.1', 48974) asked for /
+('127.0.0.1', 48974) asked for /favicon.ico
+start was called at 07/02/2022, 15:51:11
+('127.0.0.1', 47892) asked for /
+('127.0.0.1', 47892) asked for /favicon.ico
+start was called at 07/02/2022, 15:52:53
+('127.0.0.1', 58630) asked for /
+('127.0.0.1', 58630) asked for /favicon.ico
+('127.0.0.1', 58630) asked for /
+close was called at 07/02/2022, 15:53:51
+start was called at 07/02/2022, 15:55:06
+('127.0.0.1', 46960) asked for /
+('127.0.0.1', 46960) asked for /favicon.ico
+start was called at 07/02/2022, 15:56:22
+('127.0.0.1', 52548) asked for /
+('127.0.0.1', 52548) asked for /favicon.ico
+start was called at 07/02/2022, 15:58:21
+close was called at 07/02/2022, 15:58:26
+start was called at 07/02/2022, 15:58:29
+('127.0.0.1', 41768) asked for /
+('127.0.0.1', 41768) asked for /favicon.ico
+('127.0.0.1', 41768) asked for /
+close was called at 07/02/2022, 15:58:34
+start was called at 07/02/2022, 16:01:07
+('127.0.0.1', 55896) asked for /
+('127.0.0.1', 55896) asked for /favicon.ico
+close was called at 07/02/2022, 16:03:04
+start was called at 07/02/2022, 16:04:24
+('127.0.0.1', 38526) asked for /
+('127.0.0.1', 38526) asked for /favicon.ico
+('127.0.0.1', 38526) asked for /
+close was called at 07/02/2022, 16:04:30
+start was called at 07/02/2022, 16:06:57
+('127.0.0.1', 42462) asked for /
+('127.0.0.1', 42462) asked for /favicon.ico
+('127.0.0.1', 42462) asked for /
+('127.0.0.1', 42462) asked for /favicon.ico
+('127.0.0.1', 42462) asked for /
+('127.0.0.1', 42462) asked for /favicon.ico
+('127.0.0.1', 42462) asked for /
+close was called at 07/02/2022, 16:09:09
+start was called at 07/02/2022, 16:10:18
+('127.0.0.1', 48710) asked for /
+('127.0.0.1', 48722) asked for /favicon.ico
+('127.0.0.1', 48722) asked for /
+('127.0.0.1', 48722) asked for /
+('127.0.0.1', 48722) asked for /
+close was called at 07/02/2022, 16:22:40
