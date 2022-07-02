@@ -2,8 +2,7 @@
 # Installing
 
 
-´´´
-python
+´´´python
 print("HEJ!")
 ´´´
 
