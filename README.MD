@@ -2,9 +2,8 @@
 # Installing
 
 
-´´´python
-print("HEJ!")
-´´´
+    python
+    print("HEJ!")
 
 
 # Usage
