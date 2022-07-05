@@ -1,8 +1,38 @@
 
 
-import decorators
 import socket
 import threading
+import datetime
+
+enable_logging = True
+log_file = "log.txt"
+
+def log(func):
+    def wrapper(*args, **kwargs):
+        if not enable_logging: return func(*args, **kwargs)
+        returnVal = func(*args, **kwargs)
+        with open(log_file, "a") as f:
+            try:
+                if len(returnVal) < 100:
+                    f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} and returned {returnVal}\n")
+                else:
+                    f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")
+            except TypeError as e:
+                f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")    
+
+        return returnVal
+    
+    return wrapper
+
+
+def log_string(string):
+    if not enable_logging: return string
+    with open(log_file, "a") as f:
+        f.write(f"{string}\n")
+    return string
+
+
+
 
 databases = {}
 __using_remote_access = False
@@ -89,7 +119,7 @@ class Entry:
 
 def executeInstruction(instruction):
     tokens = instruction.split(" ")
-    decorators.log_string(f"Executing instruction: {instruction}")
+    log_string(f"Executing instruction: {instruction}")
     if tokens[0] == "CREATE":
         database = Database(tokens[1])
         return database
@@ -146,7 +176,7 @@ def __enable_remote_access(ip, port):
 
     print('Connection closed')
 
-@decorators.log
+@log
 def enable_remote_access(ip, port):
     global __using_remote_access
     __using_remote_access = True
