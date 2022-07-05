@@ -137,14 +137,17 @@ class WebServer:
         # return b'HTTP/1.1 ' + code.encode("utf-8") + b'\nContent-Type: ' + content_type.encode("utf-8") + b'\nContent-Length: ' + str(len(content)).encode("utf-8") + b'\n\n' + content + b'\n\n'
 
     def __get(self, path):
-        if path == "/":
-            path = "/index.html"
-
-        path = self.directory + path
         # Remove data after the ?
         if "?" in path:
             path = path[:path.index("?")]
         
+        print(path)
+
+        if path == "/":
+            path = "/index.html"
+        
+        path = self.directory + path
+
         try:
             with open(path, "rb") as f:
                 content = f.read()
