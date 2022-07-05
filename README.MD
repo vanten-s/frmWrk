@@ -44,19 +44,15 @@ except KeyboardInterrupt:
 import frmWrk
 import time
 
-# Create the webserver
-
+# Create the webserver. Directory is where the server should look for files
 website.WebServer(ip, port, directory)
 
 # Run the server
-
 website.start()
 
-# Wait 10 seconds
-
+# Wait 10 seconds and close the server
 time.sleep(10)
 
-# Close the server
 website.close()
 ```
 
