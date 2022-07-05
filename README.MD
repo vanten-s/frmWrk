@@ -1,4 +1,11 @@
 
+
+[Installation](#installing)
+
+[Quickstart](#usage)
+
+[Documentation](#documentation)
+
 # Installing
 
 Open terminal in project folder.
