@@ -18,6 +18,8 @@ Done. Look at usage for quickstart.
 
 # Usage
 
+With a index.html in the working directory this will make host a website at 127.0.0.1
+
 ```python
 # Example for website
 
@@ -45,7 +47,7 @@ import frmWrk
 import time
 
 # Create the webserver. Directory is where the server should look for files
-website.WebServer(ip, port, directory)
+website = frmWrk.website.WebServer(ip, port, directory)
 
 # Run the server
 website.start()
