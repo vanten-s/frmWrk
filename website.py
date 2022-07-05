@@ -106,7 +106,7 @@ class WebServer:
 
         return response
 
-        return b'HTTP/1.1 ' + code.encode("utf-8") + b'\nContent-Type: ' + content_type.encode("utf-8") + b'\nContent-Length: ' + str(len(content)).encode("utf-8") + b'\n\n' + content + b'\n\n'
+        # return b'HTTP/1.1 ' + code.encode("utf-8") + b'\nContent-Type: ' + content_type.encode("utf-8") + b'\nContent-Length: ' + str(len(content)).encode("utf-8") + b'\n\n' + content + b'\n\n'
 
     def __get(self, path):
         if path == "/":

@@ -4,7 +4,7 @@
 Open terminal in project folder.
 Run:
 ```bash
-git clone https://github.com/Spannnn45/frmWrk frmWrk
+$ git clone https://github.com/Spannnn45/frmWrk frmWrk
 ```
 
 Done. Look at usage for quickstart.
@@ -27,9 +27,30 @@ except KeyboardInterrupt:
     print("\nServer closed")
     exit(0)
 
-import frmWrk.website as frw
+```
 
-webSite = frw.WebServer()
+# Documentation
+
+```python
+# Import everything
+
+import frmWrk
+import time
+
+# Create the webserver
+
+website.WebServer(ip, port, directory)
+
+# Run the server
+
+website.start()
+
+# Wait 10 seconds
+
+time.sleep(10)
+
+# Close the server
+website.close()
 ```
 
 
