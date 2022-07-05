@@ -141,6 +141,10 @@ class WebServer:
             path = "/index.html"
 
         path = self.directory + path
+        # Remove data after the ?
+        if "?" in path:
+            path = path[:path.index("?")]
+        
         try:
             with open(path, "rb") as f:
                 content = f.read()

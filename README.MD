@@ -25,16 +25,13 @@ With a index.html in the working directory this will make host a website at 127.
 
 import frmWrk.website as frw
 
+# Start the server on 127.0.0.1:80
 website = frw.WebServer("127.0.0.1", 80, "./")
 website.start()
 
-try:
-    input()
-    website.close()
-except KeyboardInterrupt:
-    website.close()
-    print("\nServer closed")
-    exit(0)
+# Close the server when we get input
+input()
+website.close()
 
 ```
 
