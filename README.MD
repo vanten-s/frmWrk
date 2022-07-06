@@ -11,7 +11,7 @@
 Open terminal in project folder.
 Run:
 ```bash
-$ git clone https://github.com/Spannnn45/frmWrk frmWrk
+git clone https://github.com/Spannnn45/frmWrk frmWrk
 ```
 
 Done. Look at usage for quickstart.
