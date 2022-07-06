@@ -111,7 +111,7 @@ content_type = {
 }
 
 class WebServer:
-    def __init__(self, ip, port, directory, site404="/404.html"):
+    def __init__(self, ip, port, directory, site404="/404.html", event_handler=None):
         self.directory = directory
         self.ip = ip
         self.port = port
@@ -120,6 +120,7 @@ class WebServer:
         self.threads = []
         self.running = True
         self.site404 = directory + "/404.html"
+        self.event_handler = event_handler
 
     def __getContentType(self, path):
         path = path.split(".")[-1]
@@ -166,6 +167,9 @@ class WebServer:
 
     
     def __handleRequest(self, request):
+        if self.event_handler:
+            self.event_handler(request)
+        
         tokens = request.split(" ")
         method = tokens[0]
         path = tokens[1]
