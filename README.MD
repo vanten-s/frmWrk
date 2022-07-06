@@ -25,7 +25,7 @@ With a index.html in the working directory this will make host a website at 127.
 
 import frmWrk.website as frw
 
-# Start the server on 127.0.0.1:80
+# Start the server on 127.0.0.1:80 with parent folder as root directory
 website = frw.WebServer("127.0.0.1", 80, "./")
 website.start()
 
