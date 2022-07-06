@@ -167,14 +167,14 @@ class WebServer:
 
     
     def __handleRequest(self, request):
-        if self.event_handler:
-            self.event_handler(request)
-        
         tokens = request.split(" ")
         method = tokens[0]
         path = tokens[1]
         version = tokens[2]
 
+        if self.event_handler:
+            self.event_handler(method, (path, version))
+        
         if method == "GET":
             return self.__get(path)
 
