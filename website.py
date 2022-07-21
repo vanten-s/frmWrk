@@ -178,7 +178,7 @@ class WebServer:
         if method == "GET":
             return self.__get(path)
 
-        return "Hello World"
+        return "Only GET Requests Supported Yet Sorry."
 
     def __handleClient(self, c: socket.socket, addr):
         print("Handling client...")
