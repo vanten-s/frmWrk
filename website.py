@@ -1,11 +1,26 @@
 
-# dont write bytecode to disk
-import sys
-sys.dont_write_bytecode = True
-
 import socket
 import threading
 import datetime
+
+def boron (code: str, path: str) -> str:
+    total = []
+    for token in code.split():
+        if token.startswith("{") and token.endswith("}"):
+            token = token[1:-1]
+            ip = token.split(":")[0]
+            port = int(token.split(":")[1])
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((ip, port))
+            s.send((token.split(":")[2] + " " + path).encode())
+            total.append(s.recv(1024).decode())
+            s.close()
+
+        else:
+            total.append(token)
+
+    return " ".join(total)
+
 
 enable_logging = True
 log_file = "log.txt"
@@ -50,7 +65,8 @@ AASCI_404_NOT_FOUND = """
 <body>
 
     <h1>404 Not Found</h1>
- <pre style="font-size: xx-large;">   _  _    ___  _  _                 _      __                      _   
+ <pre style="font-size: xx-large;">
+   _  _    ___  _  _                 _      __                      _   
   | || |  / _ \| || |               | |    / _|                    | |  
   | || |_| | | | || |_   _ __   ___ | |_  | |_ ___  _   _ _ __   __| |  
   |__   _| | | |__   _| | '_ \ / _ \| __| |  _/ _ \| | | | '_ \ / _` |  
@@ -135,7 +151,6 @@ class WebServer:
 
         return response
 
-        # return b'HTTP/1.1 ' + code.encode("utf-8") + b'\nContent-Type: ' + content_type.encode("utf-8") + b'\nContent-Length: ' + str(len(content)).encode("utf-8") + b'\n\n' + content + b'\n\n'
 
     def __get(self, path):
         # Remove data after the ?
@@ -153,6 +168,9 @@ class WebServer:
             with open(path, "rb") as f:
                 content = f.read()
                 content_type = self.__getContentType(path)
+                if content_type.startswith("text/html"):
+                    content = boron(content.decode('utf-8'), path).encode('utf-8')
+
                 return self.__getResponse("200 OK", content_type, content)
         
         except FileNotFoundError:
