@@ -11,13 +11,18 @@ def boron (code: str, path: str) -> str:
             ip = token.split(":")[0]
             port = int(token.split(":")[1])
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((ip, port))
+            addr = (ip, port)
+            print(addr)
+            s.connect(addr)
             s.send((token.split(":")[2] + " " + path).encode())
-            total.append(s.recv(1024).decode())
+            response = s.recv(1024).decode()
+            total.append(response)
             s.close()
 
         else:
             total.append(token)
+
+    print("Done Computing!")
 
     return " ".join(total)
 
@@ -164,11 +169,14 @@ class WebServer:
         
         path = self.directory + path
 
+        print(path)
+
         try:
             with open(path, "rb") as f:
                 content = f.read()
                 content_type = self.__getContentType(path)
                 if content_type.startswith("text/html"):
+                    print("Executing Connection")
                     content = boron(content.decode('utf-8'), path).encode('utf-8')
 
                 return self.__getResponse("200 OK", content_type, content)
