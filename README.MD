@@ -55,7 +55,7 @@ time.sleep(10)
 website.close()
 ```
 
-frmWrk will replace substrings in the format of {ip:port:prompt} 
+frmWrk will replace substrings in the format of {ip:port:prompt} by connecting to (ip, port) and sending "{promt} {path}" where path is the URL that the user is on. Then they replace the whole substring with the response (max 1024 bytes).
 
 frmWrk.databases should not be used.
 It Can be used but please dont use it.
