@@ -55,6 +55,7 @@ time.sleep(10)
 website.close()
 ```
 
+frmWrk will replace substrings in the format of {ip:port:prompt} 
 
 frmWrk.databases should not be used.
 It Can be used but please dont use it.

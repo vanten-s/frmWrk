@@ -5,6 +5,32 @@ import datetime
 
 def boron (code: str, path: str) -> str:
     total = []
+
+    while "{" in code and "}" in code:
+        startIndex = code.index("{")
+        endIndex = code.index("}")
+        try:
+            string = code[startIndex+1:endIndex]
+            ip = string.split(":")[0]
+            port = int(string.split(":")[1])
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            addr = (ip, port)
+            print(addr)
+            s.connect(addr)
+            s.send((string.split(":")[2] + " " + path).encode('utf-8'))
+            response = s.recv(1024).decode()
+            s.close()
+            code = code.replace("{" + string + "}", response)
+            print("{" + string + "}")
+            print(code)
+
+        except Exception as e:
+            print(e)
+            code = code.replace("{" + string + "}", "")
+            print("{" + string + "}")
+            print(code)
+    
+    '''
     for token in code.split():
         if token.startswith("{") and token.endswith("}"):
             token = token[1:-1]
@@ -21,10 +47,11 @@ def boron (code: str, path: str) -> str:
 
         else:
             total.append(token)
+    '''
 
     print("Done Computing!")
 
-    return " ".join(total)
+    return code
 
 
 enable_logging = True
