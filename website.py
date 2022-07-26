@@ -2,6 +2,7 @@
 import socket
 import threading
 import datetime
+import os
 
 def boron (code: str, path: str) -> str:
     total = []
@@ -209,6 +210,12 @@ class WebServer:
                 return self.__getResponse("200 OK", content_type, content)
         
         except FileNotFoundError:
+            if "favicon.ico" in path:
+                print("Favicon not found")
+                with open(os.path.dirname(os.path.abspath(__file__)) + "/favicon.ico", "rb") as f:
+                    content = f.read()
+                    return self.__getResponse("200 OK", "image/x-icon", content)
+
             try:
                 with open(self.site404, "rb") as f:
                     content = f.read()
