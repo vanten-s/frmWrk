@@ -6,6 +6,7 @@ import os
 
 def boron (code: str, path: str) -> str:
     total = []
+    none = []
 
     while "{" in code and "}" in code:
         startIndex = code.index("{")
@@ -27,31 +28,15 @@ def boron (code: str, path: str) -> str:
 
         except Exception as e:
             print(e)
-            code = code.replace("{" + string + "}", "")
+            code = code.replace("{" + string + "}", string)
+            none.append(string)
             print("{" + string + "}")
             print(code)
-    
-    '''
-    for token in code.split():
-        if token.startswith("{") and token.endswith("}"):
-            token = token[1:-1]
-            ip = token.split(":")[0]
-            port = int(token.split(":")[1])
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            addr = (ip, port)
-            print(addr)
-            s.connect(addr)
-            s.send((token.split(":")[2] + " " + path).encode())
-            response = s.recv(1024).decode()
-            total.append(response)
-            s.close()
-
-        else:
-            total.append(token)
-    '''
+        
+    for string in none:
+        code = code.replace(string, "{" + string + "}")
 
     print("Done Computing!")
-
     return code
 
 
@@ -160,7 +145,7 @@ content_type = {
 }
 
 class WebServer:
-    def __init__(self, ip, port, directory, site404="/404.html", event_handler=None):
+    def __init__(self, ip, port, directory, site404="/404.html", event_handler=None, overwrites={}):
         self.directory = directory
         self.ip = ip
         self.port = port
@@ -170,6 +155,7 @@ class WebServer:
         self.running = True
         self.site404 = directory + "/404.html"
         self.event_handler = event_handler
+        self.overwrites = overwrites
 
     def __getContentType(self, path):
         path = path.split(".")[-1]
@@ -187,6 +173,7 @@ class WebServer:
 
     def __get(self, path):
         # Remove data after the ?
+        original = path
         if "?" in path:
             path = path[:path.index("?")]
         
@@ -195,9 +182,14 @@ class WebServer:
         if path == "/":
             path = "/index.html"
         
-        path = self.directory + path
 
         print(path)
+        print(self.overwrites)
+
+        if path in self.overwrites.keys():
+            return self.overwrites[path](original).encode("utf-8")
+
+        path = self.directory + path
 
         try:
             with open(path, "rb") as f:
@@ -233,7 +225,7 @@ class WebServer:
         version = tokens[2]
 
         if self.event_handler:
-            self.event_handler(method, (path, version))
+            self.event_handler(method, (path))
         
         if method == "GET":
             return self.__get(path)
