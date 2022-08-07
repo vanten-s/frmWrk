@@ -260,10 +260,13 @@ class WebServer:
         print("Server started on port " + str(self.port))
 
         while self.running:
-            print("Waiting for connection...")
-            c, addr = self.s.accept()
-            print("Got connection from", addr)
-            self.__handleClient(c, addr)
+            try:
+                print("Waiting for connection...")
+                c, addr = self.s.accept()
+                print("Got connection from", addr)
+                self.__handleClient(c, addr)
+            except Exception as e:
+                print("Some weird error occured")
 
 
 
