@@ -187,7 +187,7 @@ class WebServer:
         print(self.overwrites)
 
         if path in self.overwrites.keys():
-            return self.__getRespon("200 OK", self.__getContentType(path), self.overwrites[path](original).encode("utf-8"))
+            return self.__getResponse("200 OK", self.__getContentType(path), self.overwrites[path](original).encode("utf-8"))
 
         path = self.directory + path
 
