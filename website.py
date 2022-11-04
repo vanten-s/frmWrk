@@ -159,6 +159,9 @@ class WebServer:
 
     def __getContentType(self, path):
         path = path.split(".")[-1]
+        if not path in content_type.keys():
+            return 'application/octet-stream'
+
         return content_type[path]
 
     def __getResponse(self, code, content_type, content):
