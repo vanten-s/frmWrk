@@ -32,7 +32,7 @@ def boron (code: str, path: str) -> str:
             none.append(string)
             print("{" + string + "}")
             print(code)
-        
+
     for string in none:
         code = code.replace(string, "{" + string + "}")
 
@@ -54,10 +54,10 @@ def log(func):
                 else:
                     f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")
             except TypeError as e:
-                f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")    
+                f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")
 
         return returnVal
-    
+
     return wrapper
 
 
@@ -84,24 +84,24 @@ AASCI_404_NOT_FOUND = """
 
     <h1>404 Not Found</h1>
  <pre style="font-size: xx-large;">
-   _  _    ___  _  _                 _      __                      _   
-  | || |  / _ \| || |               | |    / _|                    | |  
-  | || |_| | | | || |_   _ __   ___ | |_  | |_ ___  _   _ _ __   __| |  
-  |__   _| | | |__   _| | '_ \ / _ \| __| |  _/ _ \| | | | '_ \ / _` |  
-     | | | |_| |  | |   | | | | (_) | |_  | || (_) | |_| | | | | (_| |  
-     |_|  \___/   |_|   |_| |_|\___/ \__| |_| \___/ \__,_|_| |_|\__,_|</pre> 
-                                                                         
+   _  _    ___  _  _                 _      __                      _
+  | || |  / _ \| || |               | |    / _|                    | |
+  | || |_| | | | || |_   _ __   ___ | |_  | |_ ___  _   _ _ __   __| |
+  |__   _| | | |__   _| | '_ \ / _ \| __| |  _/ _ \| | | | '_ \ / _` |
+     | | | |_| |  | |   | | | | (_) | |_  | || (_) | |_| | | | | (_| |
+     |_|  \___/   |_|   |_| |_|\___/ \__| |_| \___/ \__,_|_| |_|\__,_|</pre>
+
 </body>
 
 """
 
 content_type = {
-                'html': 'text/html; charset=\'utf-8\'', 
-                'css': 'text/css; charset=\'utf-8\'', 
-                'js': 'application/javascript; charset=\'utf-8\'', 
-                'png': 'image/png', 
-                'jpg': 'image/jpeg', 
-                'jpeg': 'image/jpeg', 
+                'html': 'text/html; charset=\'utf-8\'',
+                'css': 'text/css; charset=\'utf-8\'',
+                'js': 'application/javascript; charset=\'utf-8\'',
+                'png': 'image/png',
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
                 'gif': 'image/gif',
                 'ico': 'image/x-icon',
                 'svg': 'image/svg+xml',
@@ -176,18 +176,18 @@ class WebServer:
         original = path
         if "?" in path:
             path = path[:path.index("?")]
-        
+
         print(path)
 
         if path == "/":
             path = "/index.html"
-        
+
 
         print(path)
         print(self.overwrites)
 
         if path in self.overwrites.keys():
-            return self.overwrites[path](original).encode("utf-8")
+            return self.__getRespon("200 OK", self.__getContentType(path), self.overwrites[path](original).encode("utf-8"))
 
         path = self.directory + path
 
@@ -200,7 +200,7 @@ class WebServer:
                     content = boron(content.decode('utf-8'), path).encode('utf-8')
 
                 return self.__getResponse("200 OK", content_type, content)
-        
+
         except FileNotFoundError:
             if "favicon.ico" in path:
                 print("Favicon not found")
@@ -213,11 +213,11 @@ class WebServer:
                     content = f.read()
                     content_type = self.__getContentType(self.site404)
                     return self.__getResponse("404 Not Found", content_type, content)
-                    
+
             except FileNotFoundError:
                 return self.__getResponse("404 Not Found", "text/html; charset=\"utf-8\"", AASCI_404_NOT_FOUND.encode("utf-8"))
 
-    
+
     def __handleRequest(self, request):
         tokens = request.split(" ")
         method = tokens[0]
@@ -226,7 +226,7 @@ class WebServer:
 
         if self.event_handler:
             self.event_handler(method, (path))
-        
+
         if method == "GET":
             return self.__get(path)
 
@@ -243,11 +243,11 @@ class WebServer:
             request = data.decode("utf-8")
             response = self.__handleRequest(request)
 
-            log_string(f"{addr} asked for {request.split(' ')[1]}")            
+            log_string(f"{addr} asked for {request.split(' ')[1]}")
             print(f"{addr} asked for {request.split(' ')[1]}")
 
             c.send(response)
-        
+
         print("Closing client connection...")
         c.close()
 
@@ -262,7 +262,7 @@ class WebServer:
             print("Got connection from", addr)
             self.__handleClient(c, addr)
 
-        
+
 
     @log
     def start(self):
@@ -284,7 +284,7 @@ class WebServer:
 
 
 
-    
+
 
 
 
