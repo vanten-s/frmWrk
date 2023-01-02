@@ -185,6 +185,9 @@ class WebServer:
         if path == "/":
             path = "/index.html"
 
+        if os.path.isdir(path):
+            path = path + "/index.html"
+
 
         print(path)
         print(self.overwrites)
