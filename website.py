@@ -41,20 +41,19 @@ def boron (code: str, path: str) -> str:
 
 
 enable_logging = True
-log_file = "log.txt"
+log_file = open("log.txt", "w")
 
 def log(func):
     def wrapper(*args, **kwargs):
         if not enable_logging: return func(*args, **kwargs)
         returnVal = func(*args, **kwargs)
-        with open(log_file, "a") as f:
-            try:
-                if len(returnVal) < 100:
-                    f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')} and returned {returnVal}\n")
-                else:
-                    f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")
-            except TypeError as e:
-                f.write(f"{func.__name__} was called at {datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}\n")
+        try:
+            if len(returnVal) < 100:
+                log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called and returned {returnVal}\n")
+            else:
+                log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
+        except TypeError as e:
+            log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
 
         return returnVal
 
@@ -63,8 +62,7 @@ def log(func):
 
 def log_string(string):
     if not enable_logging: return string
-    with open(log_file, "a") as f:
-        f.write(f"{string}\n")
+    log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {string}\n")
     return string
 
 
