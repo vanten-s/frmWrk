@@ -178,17 +178,11 @@ class WebServer:
         if "?" in path:
             path = path[:path.index("?")]
 
-        print(path)
-
         if path == "/":
             path = "/index.html"
 
         if os.path.isdir(path):
             path = path + "/index.html"
-
-
-        print(path)
-        print(self.overwrites)
 
         if path in self.overwrites.keys():
             return self.__getResponse("200 OK", self.__getContentType(path), self.overwrites[path](original).encode("utf-8"))
@@ -200,14 +194,12 @@ class WebServer:
                 content = f.read()
                 content_type = self.__getContentType(path)
                 if content_type.startswith("text/html"):
-                    print("Executing Connection")
                     content = boron(content.decode('utf-8'), path).encode('utf-8')
 
                 return self.__getResponse("200 OK", content_type, content)
 
         except FileNotFoundError:
             if "favicon.ico" in path:
-                print("Favicon not found")
                 with open(os.path.dirname(os.path.abspath(__file__)) + "/favicon.ico", "rb") as f:
                     content = f.read()
                     return self.__getResponse("200 OK", "image/x-icon", content)
@@ -237,7 +229,6 @@ class WebServer:
         return "Only GET Requests Supported Yet Sorry."
 
     def __handleClient(self, c: socket.socket, addr):
-        print("Handling client...")
         global running
         while True and self.running:
             data = c.recv(1024)
@@ -248,26 +239,22 @@ class WebServer:
             response = self.__handleRequest(request)
 
             log_string(f"{addr} asked for {request.split(' ')[1]}")
-            print(f"{addr} asked for {request.split(' ')[1]}")
 
             c.send(response)
 
-        print("Closing client connection...")
         c.close()
 
     def __startServer(self):
         global running, s
 
-        print("Server started on port " + str(self.port))
+        log_string("Server started on port " + str(self.port))
 
         while self.running:
             try:
-                print("Waiting for connection...")
                 c, addr = self.s.accept()
-                print("Got connection from", addr)
                 self.__handleClient(c, addr)
             except Exception as e:
-                print("Some weird error occured")
+                log_string("Error")
 
 
 
