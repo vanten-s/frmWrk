@@ -47,7 +47,7 @@ def log(func):
         if not enable_logging: return func(*args, **kwargs)
         returnVal = func(*args, **kwargs)
         try:
-            if len(returnVal) < 100:
+            if len(returnVal) < 10:
                 log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called and returned {returnVal}\n")
             else:
                 log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
@@ -180,7 +180,7 @@ class WebServer:
         if path == "/":
             path = "/index.html"
 
-        if os.path.isdir(path):
+        if os.path.isdir(self.directory + path):
             path = path + "/index.html"
 
         if path in self.overwrites.keys():
@@ -192,8 +192,8 @@ class WebServer:
             with open(path, "rb") as f:
                 content = f.read()
                 content_type = self.__getContentType(path)
-                if content_type.startswith("text/html"):
-                    content = boron(content.decode('utf-8'), path).encode('utf-8')
+                # if content_type.startswith("text/html"):
+                #     content = boron(content.decode('utf-8'), path).encode('utf-8')
 
                 return self.__getResponse("200 OK", content_type, content)
 
@@ -204,6 +204,7 @@ class WebServer:
                     return self.__getResponse("200 OK", "image/x-icon", content)
 
             try:
+                log_string("404 Not Found: " + path)
                 with open(self.site404, "rb") as f:
                     content = f.read()
                     content_type = self.__getContentType(self.site404)
@@ -253,7 +254,7 @@ class WebServer:
                 c, addr = self.s.accept()
                 self.__handleClient(c, addr)
             except Exception as e:
-                log_string("Error")
+                log_string(e)
 
 
 
