@@ -165,7 +165,7 @@ class WebServer:
 
         response = b'HTTP/1.1 ' + code.encode("utf-8") + b'\n'
         response += b'Content-Type: ' + content_type.encode("utf-8") + b'\n'
-        response += b'Content-Length: ' + str(len(content)).encode("utf-8") + b'\n'
+        response += b'Content-Length: ' + str(len(payload)).encode("utf-8") + b'\n'
         response += b'server: frmWrk\n'
 
         for header_key in custom_headers.keys():
