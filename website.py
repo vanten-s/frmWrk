@@ -161,12 +161,19 @@ class WebServer:
 
         return content_type[path]
 
-    def __getResponse(self, code, content_type, content):
+    def __getResponse(self, code, content_type, payload, custom_headers={}):
 
         response = b'HTTP/1.1 ' + code.encode("utf-8") + b'\n'
         response += b'Content-Type: ' + content_type.encode("utf-8") + b'\n'
-        response += b'Content-Length: ' + str(len(content)).encode("utf-8") + b'\n\n'
-        response += content + b'\n\n'
+        response += b'Content-Length: ' + str(len(content)).encode("utf-8") + b'\n'
+        response += b'server: frmWrk\n'
+
+        for header_key in custom_headers.keys():
+            response += header_key.encode("utf-8") + custom_headers[header_key].encode("utf-8") + b'\n'
+
+        response += b'\n'
+
+        response += payload + b'\n\n'
 
         return response
 
@@ -181,7 +188,11 @@ class WebServer:
             path = "/index.html"
 
         if os.path.isdir(self.directory + path):
-            path = path + "/index.html"
+            if path.endswith("/"):
+                path = path + "/index.html"
+
+            else:
+                return self.__getResponse("301 Moved Permanently", self.__getContentType("/index.html"), b'', custom_headers={"location: ": path + "/"})
 
         if path in self.overwrites.keys():
             return self.__getResponse("200 OK", self.__getContentType(path), self.overwrites[path](original).encode("utf-8"))
