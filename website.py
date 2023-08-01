@@ -142,7 +142,7 @@ content_type = {
 }
 
 class WebServer:
-    def __init__(self, ip, port, directory, site404="/404.html", event_handler=None, overwrites={}):
+    def __init__(self, ip, port, directory, site404="/404.html", event_handler=None, overwrites={}, custom_router=None):
         self.directory = directory
         self.ip = ip
         self.port = port
@@ -153,6 +153,7 @@ class WebServer:
         self.site404 = directory + "/404.html"
         self.event_handler = event_handler
         self.overwrites = overwrites
+        self.custom_router = custom_router
 
     def __getContentType(self, path):
         path = path.split(".")[-1]
@@ -233,6 +234,9 @@ class WebServer:
 
         if self.event_handler:
             self.event_handler(method, (path))
+
+        if self.custom_router:
+            return self.custom_router(method, path, {})
 
         if method == "GET":
             return self.__get(path)
