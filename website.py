@@ -40,7 +40,7 @@ def boron (code: str, path: str) -> str:
 
 
 enable_logging = True
-log_file = open("log.txt", "w")
+log_file = "log.txt"
 
 def log(func):
     def wrapper(*args, **kwargs):
@@ -48,11 +48,11 @@ def log(func):
         returnVal = func(*args, **kwargs)
         try:
             if len(returnVal) < 10:
-                log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called and returned {returnVal}\n")
+                log_string(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called and returned {returnVal}\n")
             else:
-                log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
+                log_string(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
         except TypeError as e:
-            log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
+            log_string(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {func.__name__} was called\n")
 
         return returnVal
 
@@ -60,12 +60,12 @@ def log(func):
 
 
 def log_string(string):
-    if not enable_logging: return string
-    log_file.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {string}\n")
+    global log_file, enable_logging
+    if not enable_logging: return
+    with open(log_file, "a") as f:
+        f.write(f"[{datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')}] {string}\n")
+
     return string
-
-
-
 
 AASCI_404_NOT_FOUND = """
 
@@ -216,7 +216,7 @@ class WebServer:
                     return self.__getResponse("200 OK", "image/x-icon", content)
 
             try:
-                log_string("404 Not Found: " + path)
+                print(log_string("404 Not Found: " + path))
                 with open(self.site404, "rb") as f:
                     content = f.read()
                     content_type = self.__getContentType(self.site404)
@@ -267,39 +267,29 @@ class WebServer:
         while self.running:
             try:
                 c, addr = self.s.accept()
-                self.__handleClient(c, addr)
+                p = threading.Thread(target=self.__handleClient, args=(c, addr))
+                p.start()
+                self.threads.append(p)
             except Exception as e:
                 log_string(e)
 
 
-
-    @log
     def start(self):
         print("Starting server...")
         self.s.listen(1)
         t = threading.Thread(target=self.__startServer)
         t.start()
-        self.threads.append(t)
+        self.main_process = t
 
-    @log
     def close(self):
         self.running = False
         print("Closing server...")
-        for t in self.threads:
-            t.join()
-
         self.s.close()
+
+        for thread in self.threads:
+            thread.join()
+
+        self.main_process.join()
+
         print("Server closed")
-
-
-
-
-
-
-
-
-
-
-
-
 
