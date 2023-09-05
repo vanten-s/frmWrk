@@ -183,6 +183,10 @@ class WebServer:
     def __get(self, path):
         # Remove data after the ?
         original = path
+
+        if ".." in path:
+            return self.__getResponse("404 Not Found", self.__getContentType("/index.html"), b'')
+
         if "?" in path:
             path = path[:path.index("?")]
 
